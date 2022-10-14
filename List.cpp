@@ -1,3 +1,6 @@
+#pragma once;
+//List.h
+
 template <typename T>
 class List 
 {
@@ -13,7 +16,7 @@ public:
     virtual int size() const = 0;
     virtual int find(const T&, int = -1) const = 0;
     virtual int rfind(const T&, int = -1) const = 0;
-    virtual get_elem(int) const = 0;
+    virtual bool full() const = 0;
 };
 
 template <typename T>
