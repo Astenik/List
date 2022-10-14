@@ -1,3 +1,5 @@
+#pragma once;
+
 #include "List.h"
 
 template <typename T>
@@ -16,9 +18,9 @@ public:
     
     virtual bool empty() const;
     virtual int size() const;
-    virtual int find(const T&, int = -1) const;
-    virtual int rfind(const T&, int = -1) const;
-    virtual get_elem(int) const;
+    virtual int find(const T&, int) const;
+    virtual int rfind(const T&, int) const;
+    virtual  T get_elem(int) const;
     virtual bool full() const;
     
 private:
@@ -40,14 +42,14 @@ ArrList<T>::ArrList(const ArrList<T>& obj)
     , m_capacity(obj.m_capacity)
     , m_arr(new T [m_capacity])
 {
-    for(int i = 0; i < m_size: ++i)
+    for(int i = 0; i < m_size; ++i)
     {
         m_arr[i] = obj.m_arr[i];
     }
 }
 
 template <typename T>
-ArrList<T>::ArrList(const ArrList<T>&& tmp)
+ArrList<T>::ArrList(const ArrList<T>&& obj)
     : m_size(obj.m_size)
     , m_capacity(obj.m_capacity)
     , m_arr(obj.m_arr)
@@ -113,7 +115,7 @@ void ArrList<T>::erase(int i)
 {
     if(!empty())
     {
-        T* ptr = &arr[i];
+        T* ptr = &m_arr[i];
         for(int j = i; j <= m_size; ++j)
         {
             m_arr[j] = m_arr[j + 1];
@@ -126,4 +128,105 @@ void ArrList<T>::erase(int i)
     {
         throw "your list is empty";
     }
+}
+
+template <typename T>
+bool ArrList<T>::empty() const
+{
+    return size() == 0;
+}
+
+template <typename T>
+void ArrList<T>::clear()
+{
+    delete [] m_arr;
+    m_size = 0;
+    m_capacity = 0;
+}
+
+template <typename T>
+int ArrList<T>::size() const
+{
+    return m_size;
+}
+
+template <typename T>
+int ArrList<T>::find(const T& elem, int ind) const
+{
+    if(ind == -1)
+    {
+        for(int i = 0; i < m_size; ++i)
+        {
+            if(m_arr[i] == elem)
+            {
+                return i;
+            }
+        }
+    }
+    else
+    {
+        int count = 0;
+        for(int i = 0; i < m_size; ++i)
+        {
+            if(m_arr[i] == elem)
+            {
+                count++;
+            }
+            if(count == ind)
+            {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+template <typename T>
+int ArrList<T>::rfind(const T& elem, int ind) const
+{
+    if(ind == -1)
+    {
+        for(int i = m_size - 1; i >= 0; --i)
+        {
+            if(m_arr[i] == elem)
+            {
+                return i;
+            }
+        }
+    }
+    else
+    {
+        int count = 0;
+        for(int i = m_size - 1; i >= 0; --i)
+        {
+            if(m_arr[i] == elem)
+            {
+                count++;
+            }
+            if(count == ind)
+            {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+template <typename T>
+T ArrList<T>::get_elem(int ind) const 
+{
+    if(ind >= 0 && ind < m_size)
+    {
+        return m_arr[ind];
+    }
+    else
+    {
+        throw "index out of range";
+    }
+}
+
+template <typename T>
+bool ArrList<T>:: full() const
+{
+    return m_size == m_capacity;
 }
