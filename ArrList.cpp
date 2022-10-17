@@ -12,7 +12,7 @@ public:
     virtual ~ArrList();
     
 public:
-    virtual void insert(int, const T&);
+    virtual void insert(const T&, int);
     virtual void erase(int);
     virtual void clear();
     
@@ -67,46 +67,41 @@ ArrList<T>::~ArrList()
 }
 
 template <typename T>
-void ArrList<T>::insert(int i, const T& item)
+void ArrList<T>::insert(const T& item, int i)
 {
-    if(i >= 0 && i <= m_size && !full())
+    int k;
+    if(i == -1)
     {
-        if(empty())
-        {
-            m_arr = new T [m_capacity];
-            m_arr[0] = item;
-        }
-        else
-        {
-            for(int j = m_size + 1; j > i; --j)
-            {
-              m_arr[j] = m_arr[j - 1];
-            }
-            m_arr[i] = item;
-        }
-        ++m_size;
-    }
-    
-    if(i >= 0 && i <= m_size && full())
-    {
-        T* ptr = m_arr;
-        m_capacity *= 2;
-        m_arr = new T [m_capacity];
-        for(int j = 0; j < i; ++j)
-        {
-            m_arr[j] = ptr[j];
-        }
-        
-        m_arr[i] = item;
-        for(int j = i + 1; i <= m_size + 1; ++i)
-        {
-            m_arr[j] = ptr[j - 1];
-        }
-        ++m_size;
+        k = m_size;
     }
     else
     {
-        throw "index out of range";
+        k = i;
+    }
+    if(k >= 0 && k <= m_size)
+    {
+        T* ptr = m_arr;
+        if(full())
+        {
+            m_capacity *= 2;
+        }
+        m_arr = new T [m_capacity];
+        for(int i = 0; i < k; ++i)
+        {
+            m_arr[i] = ptr[i];
+        }
+        m_arr[k] = item;
+        for(int j = k + 1; j < m_size; ++j)
+        {   
+            m_arr[j] = ptr[j - 1];
+        }
+        ++m_size;
+        delete [] ptr;
+        ptr = nullptr;
+    }
+    else 
+    {
+       throw "index out of range";
     }
 }
 
