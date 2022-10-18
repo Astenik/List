@@ -22,6 +22,7 @@ public:
     int rfind(const T&, int) const;
     virtual  T get_elem(int) const;
     virtual bool full() const;
+    virtual void print() const;
     
 private:
     int m_size;
@@ -225,3 +226,13 @@ bool ArrList<T>:: full() const
 {
     return m_size == m_capacity;
 }
+
+template <typename T>
+void ArrList<T>:: print() const 
+{
+    for(int i = 0; i < m_size; ++i)
+    {
+        std::cout << m_arr[i] << std::endl;
+    }
+}
+
