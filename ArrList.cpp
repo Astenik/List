@@ -19,7 +19,7 @@ public:
     virtual bool empty() const;
     virtual int size() const;
     virtual int find(const T&, int) const;
-    virtual int rfind(const T&, int) const;
+    int rfind(const T&, int) const;
     virtual  T get_elem(int) const;
     virtual bool full() const;
     
