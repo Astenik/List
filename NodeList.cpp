@@ -69,7 +69,7 @@ NodeList<T>::~NodeList()
 }
 
 template <typename T>
-void NodeList<T>::insert(const T& item , int i)
+void NodeList<T>::insert(const T& item, int i)
 {
     if(i >= 0 && i <= m_size)
     {
@@ -140,9 +140,9 @@ int NodeList<T>::size() const
 }
 
 template <typename T>
-int NodeList<T>::find(const T& elem, int i) const
+int NodeList<T>::find(const T& elem, int ind) const
 {
-    if(i >= 0 && i < m_size)
+    if(ind >= 0 && ind < m_size)
     {
         Node<T>* ptr = m_head;
         int count = 0;
@@ -152,7 +152,7 @@ int NodeList<T>::find(const T& elem, int i) const
             if(ptr->value == elem)
             {
                 ++count;
-                if(count == i)
+                if(count == ind)
                 {
                     return i;
                 }
@@ -178,7 +178,7 @@ T NodeList<T>::get_elem(int i) const
 {
     if(i >= 0 && i < m_size)
     {
-        return move_to_pos->value;
+        return move_to_pos(i)->value;
     }
     else
     {
@@ -196,4 +196,15 @@ void NodeList<T>::print() const
         ptr = ptr->next;
     }
     std::cout << std::endl;
+}
+
+template <typename T>
+Node<T>* NodeList<T>:: move_to_pos(int ind) const
+{
+    Node<T>* ptr = m_head;
+    for(int i = 0; i < ind; ++i)
+    {
+        ptr = ptr -> next;
+    }
+    return ptr;
 }
