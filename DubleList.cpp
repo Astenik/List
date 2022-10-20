@@ -111,3 +111,12 @@ void DoubleList<T>::erase(int ind)
     }
     --m_size;
 }
+
+void DoubleList<T>::clear()
+{
+    while(m_head)
+    {
+        erase(m_size - 1);
+    }
+}
+
