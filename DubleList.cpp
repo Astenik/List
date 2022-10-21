@@ -68,16 +68,26 @@ DoubleList<T>::~DoubleList()
 template <typename T>
 void DoubleList<T>::insert(const T& item, int ind)
 {
+    if(ind < 0 || ind > m_size)
+    {
+        throw "index out of range";
+    }
     if(ind == 0)
     {
-        m_head = new DoubleList<T>(item, nullptr, m_head);
+        m_head = new DubleNode<T>(item, nullptr, m_head);
     }
     else
     {
         DubleNode<T>* ptr = move_to_pos(ind - 1);
         DubleNode<T>* tmp = new DubleNode<T>(item, ptr, ptr->next);
-        ptr->next = ptr->next->prev = tmp;
-        ptr = nullptr;
+        if(ptr->next)
+        {
+            ptr->next = ptr->next->prev = tmp;
+        }
+        else
+        {
+            ptr->next = tmp;
+        }
     }
     ++m_size;
 }
@@ -85,33 +95,45 @@ void DoubleList<T>::insert(const T& item, int ind)
 template <typename T>
 void DoubleList<T>::erase(int ind) 
 {
-    if(empty())
+    if(!empty() && ind >= 0 && ind < m_size)
     {
-        throw "your list is empty";
-    }
-    if(ind <= 0 || ind >= m_size)
-    {
-        throw "index out of range";
-    }
-    else if(ind == 0)
-    {
-        m_head = m_head->next;
-        delete m_head-> prev;
-        m_head->prev = nullptr;
+        if(ind == 0)
+        {
+            if(m_head->next)
+            {
+                m_head = m_head->next;
+                delete m_head->prev;
+            }
+            else
+            {
+                delete m_head;
+                m_head = nullptr;
+            }
+        }
+        else
+        {
+            DubleNode<T>* ptr = move_to_pos(ind);
+            if(ptr->next)
+            {
+                ptr->prev->next = ptr->next;
+                ptr->next->prev = ptr->prev;
+                
+            }
+            else
+            {
+                ptr->prev->next = ptr->next;
+            }
+            delete ptr;
+        }
     }
     else
     {
-        DubleNode<T>* ptr = move_to_pos(ind - 1);
-        DubleNode<T>* k = ptr->next->next;
-        ptr->next = k;
-        delete ptr->next;
-        k->prev = ptr;
-        ptr = nullptr;
-        k = nullptr;
+        throw "index out of range";
     }
     --m_size;
 }
 
+template <typename T>
 void DoubleList<T>::clear()
 {
     while(m_head)
@@ -120,3 +142,85 @@ void DoubleList<T>::clear()
     }
 }
 
+template <typename T>
+bool DoubleList<T>::empty() const
+{
+    return size() == 0;
+}
+
+template <typename T>
+int DoubleList<T>::size() const 
+{
+    return m_size;
+}
+
+template <typename T>
+int DoubleList<T>::find(const T& elem, int k) const 
+{
+    DubleNode<T>* ptr = m_head;
+    int count = 1;
+    for(int i = 0; i < m_size; ++i)
+    {
+        if(ptr->value == elem)
+        {
+            if(count == k)
+            {
+                return i;
+            }
+            ++count;
+        }
+        ptr = ptr->next;
+    }
+    if(count != 1)
+    {
+        std::cout << "there is only" << count << "elems that equal to that elem" << std::endl;
+    }
+    return -1;
+}
+
+template <typename T>
+bool DoubleList<T>::full() const
+{
+    return false;
+}
+
+template <typename T>
+T DoubleList<T>::get_elem(int ind) const 
+{
+    if(ind >= 0 && ind < m_size && !empty())
+    {
+        DubleNode<T>* ptr = m_head;
+        for(int i = 0; i < ind; ++i)
+        {
+            ptr = ptr->next;
+        }
+        return ptr->value;
+    }
+    else 
+    {
+        throw "index out of range";
+    }
+}
+
+template <typename T>
+void DoubleList<T>::print() const
+{
+    DubleNode<T>* ptr = m_head;
+    for(int i = 0; i < m_size; ++i)
+    {
+        std::cout << ptr->value << " ";
+        ptr = ptr->next;
+    }
+    std::cout << std::endl;
+}
+
+template <typename T>
+DubleNode<T>* DoubleList<T>::move_to_pos(int i)
+{
+    DubleNode<T>* ptr = m_head;
+    for(int k = 0; k < i; ++k)
+    {
+        ptr = ptr->next;
+    }
+    return ptr;
+}
