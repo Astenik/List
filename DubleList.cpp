@@ -24,6 +24,8 @@ public:
     virtual T get_elem(int) const;
     virtual void print() const;
     
+    void exchage();
+    
 private:
     DubleNode<T>* move_to_pos(int);
     
@@ -223,4 +225,28 @@ DubleNode<T>* DoubleList<T>::move_to_pos(int i)
         ptr = ptr->next;
     }
     return ptr;
+}
+
+template <typename T>
+void DoubleList<T>::exchage()
+{
+    if(empty())
+        return;
+    const int n = size();
+    DubleNode<T>* ptr = m_head;
+    for(int i = 0; i < 2; ++i)
+    {
+        ptr = ptr->next;
+    }
+    DubleNode<T>* ptr2 = m_head;
+    for(int i = 0; i < 3*n / 4; ++i)
+    {
+        ptr2 = ptr2->next;
+    }
+    if(ptr && ptr2)
+    {
+        T p = ptr->value;
+        ptr->value = ptr2->value;
+        ptr2->value = p;
+    }
 }
